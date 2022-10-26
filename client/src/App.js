@@ -1,168 +1,60 @@
-import { useState, useEffect } from "react";
-import './App.css';
+
 import './index.css';
+import { useState, useEffect } from 'react';
+import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
+import Home from './components/nav.components/Home';
+import Post from './components/post.components/Post';
+import CreatePost from './components/post.components/CreatePost';
+import CreateUser from './components/user.components/CreateUser';
 import Axios from "axios";
-import Logo from "./Logo";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from "./Navbar";
-import CreateProduct from "./CreateProduct";
-import ProductFeedCard from "./ProductFeedCard";
+import Profile from './components/user.components/Profile';
 
 
 function App() {
 
-  
-  const [product_name, setName] = useState("");
-  const [dept, setDept] = useState(0);
-  const [product_description, setDescription] = useState("");
-  const [product_image, setImage] = useState("");
-  const [product_price, setPrice] = useState(0);
+const [userData , setUserData] = useState([]);
+const [postData , setPostData] = useState([]);
+const [commentData , setCommentData] = useState([]);
 
-  const [newPrice, setNewPrice] = useState(0);
+useEffect(() => {
+  Axios.get(`https://hot-take-react.herokuapp.com/user_profile`).then((response) => {
+    setUserData(response.data);
+    
+  });
+}, []);
 
-  const [productList, setProductList] = useState([]);
+useEffect(() => {
+  Axios.get(`https://hot-take-react.herokuapp.com/user_post`).then((response) => {
+    setPostData(response.data);
+    
+  });
+}, []);
 
-  const addProduct = () => {
-    Axios.post(`https://cornelius-portfolio.herokuapp.com/create`, {
-      product_name,
-      dept,
-       product_description,
-      product_image,
-       product_price,
-    }).then((response) => {
-      setProductList([
-        ...productList,
-        {
-          product_name,
-           dept,
-          product_description,
-           product_image,
-           product_price,
-        },
-      ]);
-    });
-  };
-
-  useEffect(() => {
-    Axios.get("https://cornelius-portfolio.herokuapp.com/products").then((response) => {
-      setProductList(response.data);
-    });
-  }, []);
-
-  const getProducts = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/products`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-  const getTradingCards = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/trading_cards`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-  const getFigures = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/figures`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-  const getPlushies = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/plushies`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-  const getVideoGames = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/video_games`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-  const getConsoles = () => {
-    Axios.get(`https://cornelius-portfolio.herokuapp.com/consoles`).then((response) => {
-      setProductList(response.data);
-    });
-  };
-
-
-  const updateProduct_Price = (id) => {
-    Axios.put(`https://cornelius-portfolio.herokuapp.com/update`, { product_price: newPrice, id: id }).then(
-      (response) => {
-        setProductList(
-          productList.map((val) => {
-            return val.id == id
-              ? {
-                  id: val.id,
-                  product_name: val.product_name,
-                  product_description: val.product_description,
-                  dept: val.dept,
-                  product_image: val.product_image,
-                  product_price: newPrice,
-                }
-              : val;
-          })
-        );
-      }
-    );
-  };
-
-  const deleteProduct = (id) => {
-    Axios.delete(`https://cornelius-portfolio.herokuapp.com/delete/${id}`).then((response) => {
-      setProductList(
-        productList.filter((val) => {
-          return val.id != id;
-        })
-      );
-    });
-  };
+useEffect(() => {
+  Axios.get(`https://hot-take-react.herokuapp.com/post_comment`).then((response) => {
+    setCommentData(response.data);
+    
+  });
+}, []);
 
   return (
-    <>
+<Router>
 
+<nav>
+<Link className='navLink' to="/">Home</Link>
+<Link className='navLink' to="/CreateUser">Create User</Link>
+<Link className='navLink' to="/CreatePost">Create Post</Link>
+</nav>
 
-     <h1 className="title App">Turbo Tiger Trades </h1>
-       <Logo/>
-       <Logo/>
-   
-    <div className="App">
-    
-   
-  <div>
-    <Navbar
-    
-           getProducts={getProducts}
-           getTradingCards={getTradingCards}
-           getFigures={getFigures}
-           getPlushies={getPlushies}
-           getVideoGames={getVideoGames}
-           getConsoles={getConsoles}
-    
-    />
-  </div>
-
-         <div className="feed">
-
-      <div className="products">
-        
-<div className="productGrid"> 
-        {productList.map((val) => {
-          return ( 
-         
-           <ProductFeedCard val={val} key={val.product_name}/>
-
-          );
-        })}
-      </div>
-      
-      </div>
-    
-    </div> 
-
- </div>
-   
-    </>
-)  
-}
+<Routes>
+<Route exact path="/" element={<Home userData={userData} postData={postData} commentData={commentData}/>}/>
+<Route path="/Profile" element={<Profile userData={userData} postData={postData} commentData={commentData}/>}/>
+<Route path="/posts/:profile_id/:id" element={<Post userData={userData} postData={postData} setPostData={setPostData} commentData={commentData} setCommentData={setCommentData}/>}/>
+<Route path="/CreatePost" element={<CreatePost userData={userData} commentData={commentData}/>}/>
+<Route path="/CreateUser" element={<CreateUser userData={userData} commentData={commentData}/>}/>
+</Routes>
+</Router>  
+  
+)}
 
 export default App;
