@@ -25,7 +25,7 @@ const DeleteComment = ({commentData, setCommentData}) => {
 return ( 
 <>
 
-    <button onClick={(props) => {deleteComment(props.id)}}> Delete Comment </button>
+    <button onClick={(props) => {deleteComment(props.id)}}> Delete Comment! </button>
 
 </> 
 )}
