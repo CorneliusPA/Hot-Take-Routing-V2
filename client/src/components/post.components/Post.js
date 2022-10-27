@@ -4,7 +4,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import CreateComment from '../comment.components/CreateComment';
 import DeletePost from './DeletePost';
 import DeleteComment from '../comment.components/DeleteComment';
-import Axios from 'axios';
+import axios from 'axios';
 
 const Post = ({userData, postData, setPostData, commentData, setCommentData}) => {
 
@@ -16,7 +16,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
   let navigateUser = useNavigate();
   
   const editPost = (id) => {
-    Axios.put("https://hot-take-react.herokuapp.com/updatePost", 
+    axios.put("https://hot-take-react.herokuapp.com/updatePost", 
     { written_text: updatePost, id: id }).then(
       (response) => {
         setPostData(
@@ -44,7 +44,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const deletePost = (id) => {
-    Axios.delete(`https://hot-take-react.herokuapp.com/deletePost/${id}`).then((response) => {
+    axios.delete(`https://hot-take-react.herokuapp.com/deletePost/${id}`).then((response) => {
       setPostData(
         postData.filter(({props}) => {
           return props.id != id;
@@ -60,7 +60,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const editComment = (id) => {
-    Axios.put("https://hot-take-react.herokuapp.com/updateComment", { comment_text: updateComment, id: id }).then(
+    axios.put("https://hot-take-react.herokuapp.com/updateComment", { comment_text: updateComment, id: id }).then(
       (response) => {
         setCommentData(commentData.map((props) => {
             return props.id == id ? {
@@ -85,7 +85,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const deleteComment = (id) => {
-    Axios.delete(`https://hot-take-react.herokuapp.com/deleteComment/${id}`)
+    axios.delete(`https://hot-take-react.herokuapp.com/deleteComment/${id}`)
     .then((response) => {
       setCommentData(
         commentData.filter((props) => {
