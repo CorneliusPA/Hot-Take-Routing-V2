@@ -16,7 +16,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
   let navigateUser = useNavigate();
   
   const editPost = (id) => {
-    Axios.put("http://localhost:3001/updatePost", 
+    Axios.put("https://hot-take-react.herokuapp.com/updatePost", 
     { written_text: updatePost, id: id }).then(
       (response) => {
         setPostData(
@@ -44,7 +44,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const deletePost = (id) => {
-    Axios.delete(`http://localhost:3001/deletePost/${id}`).then((response) => {
+    Axios.delete(`https://hot-take-react.herokuapp.com/deletePost/${id}`).then((response) => {
       setPostData(
         postData.filter(({props}) => {
           return props.id != id;
@@ -60,7 +60,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const editComment = (id) => {
-    Axios.put("http://localhost:3001/updateComment", { comment_text: updateComment, id: id }).then(
+    Axios.put("https://hot-take-react.herokuapp.com/updateComment", { comment_text: updateComment, id: id }).then(
       (response) => {
         setCommentData(commentData.map((props) => {
             return props.id == id ? {
@@ -85,7 +85,7 @@ const Post = ({userData, postData, setPostData, commentData, setCommentData}) =>
     })};
 
   const deleteComment = (id) => {
-    Axios.delete(`http://localhost:3001/deleteComment/${id}`)
+    Axios.delete(`https://hot-take-react.herokuapp.com/deleteComment/${id}`)
     .then((response) => {
       setCommentData(
         commentData.filter((props) => {
